@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 50px;
+      }
+      #options button {
+        display: block;
+        margin: 5px auto;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Quiz App</h1>
+    <p id="question">Click the button to get a question!</p>
+    <div id="options"></div>
+    <button onclick="fetchQuiz()">Get New Question</button>
+
+    <script>
+      async function fetchQuiz() {
+        const response = await fetch("https://rw3rk3-3000.csb.app");
+        const data = await response.json();
+
+        document.getElementById("question").innerText = data.question;
+
+        const optionsContainer = document.getElementById("options");
+        optionsContainer.innerHTML = ""; // Clear previous options
+
+        data.options.forEach((option) => {
+          const button = document.createElement("button");
+          button.innerText = option;
+          button.onclick = () => checkAnswer(option, data.answer);
+          optionsContainer.appendChild(button);
+        });
+      }
+
+      function checkAnswer(selected, correct) {
+        if (selected === correct) {
+          alert("✅ Correct!");
+        } else {
+          alert("❌ Wrong! The correct answer is: " + correct);
+        }
+      }
+    </script>
+  </body>
+</html>
